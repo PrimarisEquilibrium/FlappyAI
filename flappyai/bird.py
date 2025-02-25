@@ -35,5 +35,13 @@ class Bird:
     def jump(self):
         self.y_velocity = -600
     
+    def get_hitbox(self):
+        return pygame.Rect(
+            self.x - self.ctr_x, 
+            self.y - self.ctr_y, 
+            self.bird.get_width(), 
+            self.bird.get_height()
+        )
+    
     def draw(self, surface):
         surface.blit(self.bird, (self.x - self.ctr_x, self.y - self.ctr_y))

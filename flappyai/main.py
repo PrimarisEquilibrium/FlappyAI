@@ -54,6 +54,8 @@ def run():
             pipe_manager.update_pipes(dt)
             ground_manager.update(dt)
             bird.update(dt)
+        
+        print(pipe_manager.has_bird_collided(bird.get_hitbox()))
 
         pygame.display.flip()
 
