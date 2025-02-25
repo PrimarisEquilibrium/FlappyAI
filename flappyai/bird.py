@@ -18,7 +18,9 @@ class Bird:
     
     def update(self, event_list, dt):
         for event in event_list:
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+            if (event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE):
+                self.y_velocity = -600
+            if (event.type == pygame.MOUSEBUTTONDOWN):
                 self.y_velocity = -600
                 
         # Update velocity
