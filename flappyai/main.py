@@ -1,6 +1,7 @@
 import pygame
 from bird import Bird
-from pipes import PipeManager
+from pipe import PipeManager
+from ground import GroundManager
 from config import SCREEN_WIDTH, SCREEN_HEIGHT
 
 def run():
@@ -12,6 +13,9 @@ def run():
 
     background = pygame.image.load("./assets/sprites/background.png")
     background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
+
+    ground_manager = GroundManager()
+    ground_manager.create_ground()
 
     ACTION = pygame.event.custom_type()
     pipe_manager = PipeManager()
@@ -36,8 +40,11 @@ def run():
         screen.fill((0, 0, 0))
         screen.blit(background, (0, 0))
 
-        pipe_manager.draw_pipes(screen)
         pipe_manager.update_pipes(dt)
+        pipe_manager.draw_pipes(screen)
+
+        ground_manager.update(dt)
+        ground_manager.draw(screen)
 
         bird.draw(screen)
         bird.update(event_list, dt)
