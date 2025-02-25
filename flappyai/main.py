@@ -3,20 +3,23 @@ from bird import Bird
 from pipe import PipeManager
 from ground import GroundManager
 from config import SCREEN_WIDTH, SCREEN_HEIGHT
-from utils import display_text
+from utils import display_text, Button
 
 background = pygame.image.load("./assets/sprites/background.png")
 background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
 def display_game_over_screen(surface, score):
+    pygame.mouse.set_visible(1)
+
     game_over_screen_fade = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
     game_over_screen_fade.fill((0, 0, 0))
     game_over_screen_fade.set_alpha(160)
     surface.blit(game_over_screen_fade, (0, 0))
 
-    display_text(surface, "Game Over!", 72, "white", SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 100, True)
+    display_text(surface, "Game Over!", 72, "white", SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 75, True)
     display_text(surface, f"Score: {score}", 36, "white", SCREEN_WIDTH/2, SCREEN_HEIGHT/2, True)
     display_text(surface, f"High Score: N/A", 36, "white", SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 50, True)
+    display_text(surface, f"Press any key to play again", 36, "white", SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 100, True)
 
 def run():
     # Pygame initialization
@@ -57,6 +60,8 @@ def run():
                 has_started = True
                 if not game_over:
                     bird.jump()
+            if game_over and (event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN):
+                run() # Replay the game
 
         screen.fill((0, 0, 0))
         screen.blit(background, (0, 0))
