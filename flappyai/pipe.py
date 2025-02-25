@@ -1,23 +1,24 @@
 import pygame
 import random
-from config import SCREEN_HEIGHT, SCREEN_WIDTH
+from config import SCREEN_WIDTH, FLOOR_Y, SCROLL_SPEED
 
 # A flappy bird pipe
 class Pipe:
     def __init__(self, x):
         self.x = x
-        self.opening = random.randint(150, int(SCREEN_HEIGHT - 150)) # The point where the pipe is open
+        self.opening = random.randint(100, int(FLOOR_Y - 100)) # The point where the pipe is open
         self.opening_size = 80
+        self.pipe_speed = 250
     
     def draw(self, surface):
         top_pipe = pygame.image.load("./assets/sprites/pipe.png")
-        top_pipe = pygame.transform.scale_by(top_pipe, 1.8)
+        top_pipe = pygame.transform.scale_by(top_pipe, 1.6)
         bottom_pipe = pygame.transform.rotate(top_pipe, 180)
         surface.blit(top_pipe, (self.x, self.opening + self.opening_size))
         surface.blit(bottom_pipe, (self.x, self.opening - self.opening_size - bottom_pipe.get_height()))
     
     def update(self, dt):
-        self.x -= 150 * dt
+        self.x -= SCROLL_SPEED * dt
 
 # Handles a collection of pipes
 class PipeManager:

@@ -21,7 +21,7 @@ def run():
     pipe_manager = PipeManager()
 
     pipe_manager.spawn_pipe()
-    pygame.time.set_timer(pygame.event.Event(ACTION, action=pipe_manager.spawn_pipe), 2000, 100)
+    pygame.time.set_timer(pygame.event.Event(ACTION, action=pipe_manager.spawn_pipe), 1500, 100)
 
     bird = Bird(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 2, 1.8)
     pygame.mouse.set_visible(0)
