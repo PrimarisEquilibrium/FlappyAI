@@ -1,6 +1,24 @@
 import pygame
+import random
 from bird import Bird
 from config import SCREEN_WIDTH, SCREEN_HEIGHT
+
+class Pipe:
+    def __init__(self, x):
+        self.x = x
+        self.opening = random.randint(25, int(SCREEN_HEIGHT - 25)) # The point where the pipe is open
+        self.opening_size = 100
+    
+    def draw(self, surface):
+        top_pipe = pygame.image.load("./assets/sprites/pipe.png")
+        top_pipe = pygame.transform.scale_by(top_pipe, 1.5)
+        bottom_pipe = pygame.transform.rotate(top_pipe, 180)
+        surface.blit(top_pipe, (self.x, self.opening + self.opening_size))
+        surface.blit(bottom_pipe, (self.x, self.opening - self.opening_size - bottom_pipe.get_height()))
+
+class PipeSpawner:
+    def __init__(self):
+        self.pipes = []
 
 def run():
     pygame.init()
@@ -12,7 +30,9 @@ def run():
     background = pygame.image.load("./assets/sprites/background.png")
     background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
-    bird = Bird(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 2, 1.25)
+    pipe = Pipe(100)
+
+    bird = Bird(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 2, 1.5)
     pygame.mouse.set_visible(0)
     while running:
         event_list = pygame.event.get()
@@ -29,6 +49,8 @@ def run():
 
         bird.draw(screen)
         bird.update(event_list, dt)
+
+        pipe.draw(screen)
 
         pygame.display.flip()
 
