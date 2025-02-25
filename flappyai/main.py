@@ -62,7 +62,8 @@ def run():
             if not game_over:
                 pipe_manager.update_pipes(dt)
                 ground_manager.update(dt)
-            bird.update(dt)
+            if bird.update(dt) == False:
+                game_over = True
         
         if pipe_manager.has_passed_pipe(bird.get_hitbox()):
             score += 1

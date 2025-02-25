@@ -16,6 +16,7 @@ class Bird:
         self.y_acceleration = 9.8
         self.terminal_velocity = 600
     
+    # Returns false if game over (bird hits the ceiling or ground)
     def update(self, dt):    
         # Update velocity
         self.y_velocity += self.y_acceleration
@@ -25,12 +26,13 @@ class Bird:
         # Update position
         self.y += self.y_velocity * dt
 
-        # !! Death triggers (boundaries for now)
         if self.y + self.ctr_y >= FLOOR_Y:
             self.y = FLOOR_Y - self.ctr_y
+            return False
         if self.y - self.ctr_y < 0:
             self.y = self.ctr_y
             self.y_velocity = 0
+            return False
         
     def jump(self):
         self.y_velocity = -600
