@@ -24,6 +24,7 @@ class Pipe:
 class PipeManager:
     def __init__(self):
         self.pipes = []
+        self.timer = 0
     
     def spawn_pipe(self):
         self.pipes.append(Pipe(SCREEN_WIDTH + 50))
@@ -33,5 +34,8 @@ class PipeManager:
             pipe.draw(surface)
     
     def update_pipes(self, dt):
+        if pygame.time.get_ticks() - self.timer > 1500:
+            self.spawn_pipe()
+            self.timer = pygame.time.get_ticks()
         for pipe in self.pipes:
             pipe.update(dt)

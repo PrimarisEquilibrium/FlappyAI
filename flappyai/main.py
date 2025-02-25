@@ -29,7 +29,6 @@ def run():
     pipe_manager = PipeManager()
 
     # Game loop
-    timer = 0
     while running:
         event_list = pygame.event.get()
         for event in event_list:
@@ -42,10 +41,6 @@ def run():
 
         screen.fill((0, 0, 0))
         screen.blit(background, (0, 0))
-
-        if pygame.time.get_ticks() - timer > 1500:
-            pipe_manager.spawn_pipe()
-            timer = pygame.time.get_ticks()
 
         pipe_manager.update_pipes(dt)
         pipe_manager.draw_pipes(screen)
