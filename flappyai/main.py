@@ -28,9 +28,12 @@ def run():
 
     pipe_manager = PipeManager()
 
+    font = pygame.font.SysFont(None, 72)
+    score = 0
+
     # Game loop
     has_started = False
-    is_game_over = False
+    game_over = False
     while running:
         event_list = pygame.event.get()
         for event in event_list:
@@ -42,7 +45,7 @@ def run():
                     return
             if (event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE) or event.type == pygame.MOUSEBUTTONDOWN:
                 has_started = True
-                if not is_game_over:
+                if not game_over:
                     bird.jump()
 
         screen.fill((0, 0, 0))
@@ -52,14 +55,20 @@ def run():
         ground_manager.draw(screen)
         bird.draw(screen)
 
-        if pipe_manager.has_bird_collided(bird.get_hitbox()):
-            is_game_over = True
+        if pipe_manager.is_game_over(bird.get_hitbox()):
+            game_over = True
 
         if has_started:
-            if not is_game_over:
+            if not game_over:
                 pipe_manager.update_pipes(dt)
                 ground_manager.update(dt)
             bird.update(dt)
+        
+        if pipe_manager.has_passed_pipe(bird.get_hitbox()):
+            score += 1
+
+        img = font.render(str(score), True, "white")
+        screen.blit(img, (20, 20))
 
         pygame.display.flip()
 
