@@ -16,13 +16,7 @@ class Bird:
         self.y_acceleration = 9.8
         self.terminal_velocity = 600
     
-    def update(self, event_list, dt):
-        for event in event_list:
-            if (event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE):
-                self.y_velocity = -600
-            if (event.type == pygame.MOUSEBUTTONDOWN):
-                self.y_velocity = -600
-                
+    def update(self, dt):    
         # Update velocity
         self.y_velocity += self.y_acceleration
         if self.y_velocity > self.terminal_velocity:
@@ -37,6 +31,9 @@ class Bird:
         if self.y - self.ctr_y < 0:
             self.y = self.ctr_y
             self.y_velocity = 0
+        
+    def jump(self):
+        self.y_velocity = -600
     
     def draw(self, surface):
         surface.blit(self.bird, (self.x - self.ctr_x, self.y - self.ctr_y))

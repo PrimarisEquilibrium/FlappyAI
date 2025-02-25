@@ -17,6 +17,7 @@ def run():
     # Pygame variables
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
+    hasStarted = False
     running = True
     dt = 0
 
@@ -38,18 +39,21 @@ def run():
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     return
+            if (event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE) or event.type == pygame.MOUSEBUTTONDOWN:
+                hasStarted = True
+                bird.jump()
 
         screen.fill((0, 0, 0))
         screen.blit(background, (0, 0))
-
-        pipe_manager.update_pipes(dt)
+    
         pipe_manager.draw_pipes(screen)
-
-        ground_manager.update(dt)
         ground_manager.draw(screen)
-
         bird.draw(screen)
-        bird.update(event_list, dt)
+
+        if hasStarted:
+            pipe_manager.update_pipes(dt)
+            ground_manager.update(dt)
+            bird.update(dt)
 
         pygame.display.flip()
 
