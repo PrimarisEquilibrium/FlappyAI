@@ -4,30 +4,34 @@ from pipe import PipeManager
 from ground import GroundManager
 from config import SCREEN_WIDTH, SCREEN_HEIGHT
 
+background = pygame.image.load("./assets/sprites/background.png")
+background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
+ACTION = pygame.event.custom_type()
+
 def run():
+    # Pygame initialization
     pygame.init()
     pygame.display.set_caption("FlappyAI")
     pygame.display.set_icon(pygame.image.load("./assets/sprites/bird.png"))
-    
+    pygame.mouse.set_visible(0)
+
+    # Pygame variables
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
     running = True
     dt = 0
 
-    background = pygame.image.load("./assets/sprites/background.png")
-    background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
+    # Game class initialization
+    bird = Bird(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 2, 1.8)
 
     ground_manager = GroundManager()
     ground_manager.create_ground()
 
-    ACTION = pygame.event.custom_type()
     pipe_manager = PipeManager()
-
     pipe_manager.spawn_pipe()
     pygame.time.set_timer(pygame.event.Event(ACTION, action=pipe_manager.spawn_pipe), 1500, 100)
 
-    bird = Bird(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 2, 1.8)
-    pygame.mouse.set_visible(0)
+    # Game loop
     while running:
         event_list = pygame.event.get()
         for event in event_list:

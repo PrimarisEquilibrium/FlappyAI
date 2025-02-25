@@ -1,5 +1,5 @@
 import pygame
-from config import SCREEN_HEIGHT, FLOOR_Y
+from config import FLOOR_Y
 
 # Represents the "flappy" bird
 class Bird:
