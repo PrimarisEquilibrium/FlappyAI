@@ -1,0 +1,3 @@
+# Screen dimensions
+SCREEN_WIDTH = 500
+SCREEN_HEIGHT = SCREEN_WIDTH * 1.3
