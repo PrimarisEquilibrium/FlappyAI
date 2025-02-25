@@ -74,6 +74,7 @@ def run():
             game_over = True
 
         if has_started:
+            bird.animate()
             if not game_over:
                 pipe_manager.update_pipes(dt)
                 ground_manager.update(dt)
