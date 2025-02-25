@@ -3,9 +3,20 @@ from bird import Bird
 from pipe import PipeManager
 from ground import GroundManager
 from config import SCREEN_WIDTH, SCREEN_HEIGHT
+from utils import display_text
 
 background = pygame.image.load("./assets/sprites/background.png")
 background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
+
+def display_game_over_screen(surface, score):
+    game_over_screen_fade = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+    game_over_screen_fade.fill((0, 0, 0))
+    game_over_screen_fade.set_alpha(160)
+    surface.blit(game_over_screen_fade, (0, 0))
+
+    display_text(surface, "Game Over!", 72, "white", SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 100, True)
+    display_text(surface, f"Score: {score}", 36, "white", SCREEN_WIDTH/2, SCREEN_HEIGHT/2, True)
+    display_text(surface, f"High Score: N/A", 36, "white", SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 50, True)
 
 def run():
     # Pygame initialization
@@ -28,7 +39,6 @@ def run():
 
     pipe_manager = PipeManager()
 
-    font = pygame.font.SysFont(None, 72)
     score = 0
 
     # Game loop
@@ -67,9 +77,11 @@ def run():
         
         if pipe_manager.has_passed_pipe(bird.get_hitbox()):
             score += 1
+        
+        display_text(screen, str(score), 72, "white", 20, 20)
 
-        img = font.render(str(score), True, "white")
-        screen.blit(img, (20, 20))
+        if game_over:
+            display_game_over_screen(screen, score)
 
         pygame.display.flip()
 
