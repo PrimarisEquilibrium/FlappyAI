@@ -2,18 +2,25 @@ import pygame
 
 # Represents the "flappy" bird
 class Bird:
-    def __init__(self, x, y):
+    def __init__(self, x, y, bird_size):
         self.x = x
         self.y = y
-        self.vertical_speed = 500
-        self.falling_constant = 5
-        self.jump_speed = 10
+        self.bird_size = bird_size
+
+        self.y_velocity = 0
+        self.y_acceleration = 0.5
+        self.terminal_velocity = 8
     
     def update(self, event_list, dt):
         for event in event_list:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                self.y -= 100
-        self.y += 7
+                self.y_velocity = -10
+        # Update velocity
+        self.y_velocity += self.y_acceleration
+        if self.y_velocity > self.terminal_velocity:
+            self.y_velocity = self.terminal_velocity
+        # Update position
+        self.y += self.y_velocity
     
     def jump(self):
         pass
@@ -28,7 +35,7 @@ def run():
     running = True
     dt = 0
 
-    bird = Bird(50, 50)
+    bird = Bird(50, 50, 25)
     while running:
         event_list = pygame.event.get()
         for event in event_list:
