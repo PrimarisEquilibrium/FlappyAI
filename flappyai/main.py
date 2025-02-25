@@ -3,7 +3,6 @@ from bird import Bird
 from pipes import PipeManager
 from config import SCREEN_WIDTH, SCREEN_HEIGHT
 
-
 def run():
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -18,9 +17,9 @@ def run():
     pipe_manager = PipeManager()
 
     pipe_manager.spawn_pipe()
-    pygame.time.set_timer(pygame.event.Event(ACTION, action=pipe_manager.spawn_pipe), 3000, 100)
+    pygame.time.set_timer(pygame.event.Event(ACTION, action=pipe_manager.spawn_pipe), 2000, 100)
 
-    bird = Bird(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 2, 1.5)
+    bird = Bird(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 2, 1.8)
     pygame.mouse.set_visible(0)
     while running:
         event_list = pygame.event.get()
@@ -38,14 +37,14 @@ def run():
         screen.blit(background, (0, 0))
 
         pipe_manager.draw_pipes(screen)
-        pipe_manager.update_pipes()
+        pipe_manager.update_pipes(dt)
 
         bird.draw(screen)
         bird.update(event_list, dt)
 
         pygame.display.flip()
 
-        dt = clock.tick(60) / 1000
+        dt = clock.tick(240) / 1000
 
     pygame.quit()
 
