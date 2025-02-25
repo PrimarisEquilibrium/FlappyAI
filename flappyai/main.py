@@ -1,5 +1,9 @@
 import pygame
 
+# Screen dimensions
+SCREEN_WIDTH = 1280
+SCREEN_HEIGHT = 720
+
 # Represents the "flappy" bird
 class Bird:
     def __init__(self, x, y, bird_size):
@@ -15,15 +19,21 @@ class Bird:
         for event in event_list:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self.y_velocity = -10
+                
         # Update velocity
         self.y_velocity += self.y_acceleration
         if self.y_velocity > self.terminal_velocity:
             self.y_velocity = self.terminal_velocity
+            
         # Update position
         self.y += self.y_velocity
-    
-    def jump(self):
-        pass
+
+        # !! Death triggers (boundaries for now)
+        if self.y + self.bird_size >= SCREEN_HEIGHT:
+            self.y = SCREEN_HEIGHT - self.bird_size
+        if self.y - self.bird_size < 0:
+            self.y = self.bird_size
+            self.y_velocity = 0
     
     def draw(self, surface):
         pygame.draw.circle(surface, "yellow", (self.x, self.y), 25)
