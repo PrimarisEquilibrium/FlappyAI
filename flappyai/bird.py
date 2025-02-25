@@ -1,5 +1,5 @@
 import pygame
-from config import SCREEN_HEIGHT
+from config import SCREEN_HEIGHT, FLOOR_Y
 
 # Represents the "flappy" bird
 class Bird:
@@ -30,10 +30,10 @@ class Bird:
         self.y += self.y_velocity * dt
 
         # !! Death triggers (boundaries for now)
-        if self.y + self.ctr_y >= SCREEN_HEIGHT:
-            self.y = SCREEN_HEIGHT - self.ctr_y * dt
+        if self.y + self.ctr_y >= FLOOR_Y:
+            self.y = FLOOR_Y - self.ctr_y
         if self.y - self.ctr_y < 0:
-            self.y = self.ctr_y * dt
+            self.y = self.ctr_y
             self.y_velocity = 0
     
     def draw(self, surface):
