@@ -17,7 +17,6 @@ def run():
     # Pygame variables
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
-    hasStarted = False
     running = True
     dt = 0
 
@@ -30,6 +29,8 @@ def run():
     pipe_manager = PipeManager()
 
     # Game loop
+    has_started = False
+    is_game_over = False
     while running:
         event_list = pygame.event.get()
         for event in event_list:
@@ -40,8 +41,9 @@ def run():
                     pygame.quit()
                     return
             if (event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE) or event.type == pygame.MOUSEBUTTONDOWN:
-                hasStarted = True
-                bird.jump()
+                has_started = True
+                if not is_game_over:
+                    bird.jump()
 
         screen.fill((0, 0, 0))
         screen.blit(background, (0, 0))
@@ -50,12 +52,14 @@ def run():
         ground_manager.draw(screen)
         bird.draw(screen)
 
-        if hasStarted:
-            pipe_manager.update_pipes(dt)
-            ground_manager.update(dt)
+        if pipe_manager.has_bird_collided(bird.get_hitbox()):
+            is_game_over = True
+
+        if has_started:
+            if not is_game_over:
+                pipe_manager.update_pipes(dt)
+                ground_manager.update(dt)
             bird.update(dt)
-        
-        print(pipe_manager.has_bird_collided(bird.get_hitbox()))
 
         pygame.display.flip()
 
