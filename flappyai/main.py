@@ -6,7 +6,6 @@ from config import SCREEN_WIDTH, SCREEN_HEIGHT
 
 background = pygame.image.load("./assets/sprites/background.png")
 background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
-ACTION = pygame.event.custom_type()
 
 def run():
     # Pygame initialization
@@ -28,10 +27,9 @@ def run():
     ground_manager.create_ground()
 
     pipe_manager = PipeManager()
-    pipe_manager.spawn_pipe()
-    pygame.time.set_timer(pygame.event.Event(ACTION, action=pipe_manager.spawn_pipe), 1500, 100)
 
     # Game loop
+    timer = 0
     while running:
         event_list = pygame.event.get()
         for event in event_list:
@@ -41,11 +39,13 @@ def run():
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     return
-            if event.type == ACTION:
-                event.action()
 
         screen.fill((0, 0, 0))
         screen.blit(background, (0, 0))
+
+        if pygame.time.get_ticks() - timer > 1500:
+            pipe_manager.spawn_pipe()
+            timer = pygame.time.get_ticks()
 
         pipe_manager.update_pipes(dt)
         pipe_manager.draw_pipes(screen)
