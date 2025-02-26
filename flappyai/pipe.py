@@ -52,11 +52,17 @@ class Pipe:
 class PipeManager:
     def __init__(self):
         self.pipes = []
-        self.latest_pipe = None
+        self.latest_pased_pipe = None
         self.timer = 0
     
     def spawn_pipe(self):
         self.pipes.append(Pipe(SCREEN_WIDTH + 50))
+    
+    def get_closest_pipe(self, bird_x):
+        for pipe in self.pipes:
+            # Only returns pipes in front of the bird
+            if pipe.x > bird_x:
+                return pipe
     
     def draw_pipes(self, surface):
         for pipe in self.pipes:
@@ -78,8 +84,8 @@ class PipeManager:
     def has_passed_pipe(self, bird_hitbox_rect):
         for pipe in self.pipes:
             # Only count the pipe being passed one time
-            if pipe.has_passed_pipe(bird_hitbox_rect) and pipe is not self.latest_pipe:
-                self.latest_pipe = pipe
+            if pipe.has_passed_pipe(bird_hitbox_rect) and pipe is not self.latest_pased_pipe:
+                self.latest_pased_pipe = pipe
                 return True
         return False
             

@@ -2,7 +2,7 @@ import pygame
 from bird import Bird
 from pipe import PipeManager
 from ground import GroundManager
-from config import SCREEN_WIDTH, SCREEN_HEIGHT
+from config import SCREEN_WIDTH, SCREEN_HEIGHT, FLOOR_Y
 from utils import display_text, Button
 
 background = pygame.image.load("./assets/sprites/background.png")
@@ -69,6 +69,14 @@ def run():
         pipe_manager.draw_pipes(screen)
         ground_manager.draw(screen)
         bird.draw(screen)
+
+        closest_pipe = pipe_manager.get_closest_pipe(bird.x)
+        if closest_pipe:
+            print("Pipe distance from bird:", round(closest_pipe.x - bird.x, 2))
+            # Line from bird to pipe distance
+            pygame.draw.line(screen, "green", (bird.x, bird.y), (closest_pipe.x, bird.y))
+        print("Distance from ground:", round(FLOOR_Y - bird.y, 2))
+        pygame.draw.line(screen, "green", (bird.x, bird.y), (bird.x, FLOOR_Y))
 
         if pipe_manager.is_game_over(bird.get_hitbox()):
             game_over = True
