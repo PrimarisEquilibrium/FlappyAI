@@ -49,7 +49,7 @@ class Pipe:
             hitbox_rect
         )
     
-    def is_game_over(self, bird_hitbox_rect):
+    def collided_with_pipe(self, bird_hitbox_rect):
         """Returns True if the bird has collided with a pipe.
 
         Args:
@@ -99,32 +99,65 @@ class PipeManager:
         self.timer = 0
     
     def spawn_pipe(self):
+        """Spawns a pipe to the right beyond the rendered screen.
+        """
         self.pipes.append(Pipe(SCREEN_WIDTH + 50))
     
     def get_closest_pipe(self, bird_x):
+        """Returns the pipe that is closest to the bird, but not behind it.
+
+        Args:
+            bird_x (Number): The x-position of the bird.
+
+        Returns:
+            Pipe|None: The pipe closest to the bird; if a pipe isn't initialized yet, None.
+        """
         for pipe in self.pipes:
             # Only returns pipes in front of the bird
             if pipe.x > bird_x:
                 return pipe
     
     def draw_pipes(self, surface):
+        """Draws all the stored pipes.
+
+        Args:
+            surface (pygame.Surface): The pygame surface to draw the pipes on.
+        """
         for pipe in self.pipes:
             pipe.draw(surface)
     
     def update_pipes(self, dt):
+        """Updates all the position and handles generation of new pipes.
+
+        Args:
+            dt (Number): Delta time.
+        """
         if pygame.time.get_ticks() - self.timer > 1500:
             self.spawn_pipe()
             self.timer = pygame.time.get_ticks()
         for pipe in self.pipes:
             pipe.update(dt)
     
-    def is_game_over(self, bird):
-        for pipe in self.pipes:
-            if pipe.is_game_over(bird):
-                return True
-        return False
+    def collided_with_pipes(self, bird_hitbox_rect):
+        """Returns True if any pipes collided_with_pipe method is also True.
+
+        Args:
+            bird_hitbox_rect (pygame.Rect): The hitbox Rect of the bird.
+
+        Returns:
+            bool: True if the bird has collided with any pipe; otherwise False.
+        """
+        return any([pipe.collided_with_pipe(bird_hitbox_rect) for pipe in self.pipes])
 
     def has_passed_pipe(self, bird_hitbox_rect):
+        """Returns True if the bird collides with opening.
+
+        Args:
+            bird_hitbox_rect (pygame.Rect): The hitbox Rect of the bird.
+
+        Returns:
+            bool: True if the bird collides with the opening hitbox; otherwise False.
+        """
         for pipe in self.pipes:
             # Only count the pipe being passed one time
             if pipe.has_passed_pipe(bird_hitbox_rect) and pipe is not self.latest_pased_pipe:
