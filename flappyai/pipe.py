@@ -2,51 +2,94 @@ import pygame
 import random
 from config import SCREEN_WIDTH, FLOOR_Y, SCROLL_SPEED
 
-# A flappy bird pipe
 class Pipe:
+    """Represents a Flappy Bird Pipe.
+    """
+    pipe_img = pygame.image.load("./assets/sprites/pipe.png")
+
     def __init__(self, x):
+        """Initialize the Pipe object.
+
+        Args:
+            x (int): The initial x-position of the pipe.
+        """
         self.x = x
         self.opening = random.randint(100, int(FLOOR_Y - 100)) # The point where the pipe is open
         self.opening_size = 80
         self.pipe_speed = 250
-        self.pipe_img = pygame.image.load("./assets/sprites/pipe.png")
 
     def draw(self, surface):
+        """Draws the Pipe object onto the given pygame surface.
+
+        Args:
+            surface (pygame.Surface): The pygame surface to draw on.
+        """
         top_pipe = pygame.transform.scale_by(self.pipe_img, 1.6)
         bottom_pipe = pygame.transform.rotate(top_pipe, 180)
         surface.blit(top_pipe, (self.x, self.opening + self.opening_size))
         surface.blit(bottom_pipe, (self.x, self.opening - self.opening_size - bottom_pipe.get_height()))
+
+    def pipe_hitbox(self, pipe_y, hitbox_rect):
+        """Returns true if a pipe collides with a hitbox Rect.
+
+        Args:
+            pipe_y (Number): The y-position of the pipe.
+            hitbox_rect (pygame.Rect): The hitbox Rect.
+
+        Returns:
+            bool: True if the hitbox Rect collides with the pipe; otherwise False.
+        """
+        return pygame.Rect.colliderect(
+            pygame.Rect(
+                self.x, 
+                pipe_y, 
+                self.pipe_img.get_width(), 
+                self.pipe_img.get_height()
+            ), 
+            hitbox_rect
+        )
     
-    # Checks if the bird has collided with the pipe
     def is_game_over(self, bird_hitbox_rect):
-        return (pygame.Rect.colliderect(self.top_pipe_hitbox, bird_hitbox_rect)
-                or pygame.Rect.colliderect(self.bottom_pipe_hitbox, bird_hitbox_rect))
+        """Returns True if the bird has collided with a pipe.
+
+        Args:
+            bird_hitbox_rect (pygame.Rect): The hitbox Rect of the bird.
+
+        Returns:
+            bool: True if the bird has collided with a pipe; otherwise False.
+        """
+        
+        return (self.pipe_hitbox(self.opening + self.opening_size, bird_hitbox_rect) or 
+                self.pipe_hitbox(self.opening - self.opening_size - self.pipe_img.get_height(), bird_hitbox_rect))
 
     def has_passed_pipe(self, bird_hitbox_rect):
-        return pygame.Rect.colliderect(self.opening_hitbox , bird_hitbox_rect)
+        """Returns True if the bird passes through a pipe.
+
+        Args:
+            bird_hitbox_rect (pygame.Rect): The hitbox Rect of the bird.
+
+        Returns:
+            bool: True if the bird has passed through a pipe; otherwise False.
+        """
+
+        return pygame.Rect.colliderect(
+            pygame.Rect( # The pipe opening hitbox
+                self.x + self.pipe_img.get_width(), 
+                self.opening - self.opening_size, 
+                10, 
+                self.opening_size * 2
+            ), 
+            bird_hitbox_rect
+        )
 
     def update(self, dt):
+        """Updates the state of the Pipe.
+
+        Args:
+            dt (Number): Delta time.
+        """
         self.x -= SCROLL_SPEED * dt
 
-        # Initialize/Update hitbox
-        self.top_pipe_hitbox = pygame.Rect(
-            self.x, 
-            self.opening + self.opening_size, 
-            self.pipe_img.get_width(), 
-            self.pipe_img.get_height()
-        )
-        self.bottom_pipe_hitbox = pygame.Rect(
-            self.x, 
-            self.opening - self.opening_size - self.pipe_img.get_height(), 
-            self.pipe_img.get_width(), 
-            self.pipe_img.get_height()
-        )
-        self.opening_hitbox = pygame.Rect(
-            self.x + self.pipe_img.get_width(), 
-            self.opening - self.opening_size, 
-            10, 
-            self.opening_size * 2
-        )
 
 # Handles a collection of pipes
 class PipeManager:
