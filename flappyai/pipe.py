@@ -91,9 +91,13 @@ class Pipe:
         self.x -= SCROLL_SPEED * dt
 
 
-# Handles a collection of pipes
 class PipeManager:
+    """Represents a collection of pipes and their subsequent operations.
+    """
+
     def __init__(self):
+        """Initialize the PipeManager object.
+        """
         self.pipes = []
         self.latest_pased_pipe = None
         self.timer = 0
