@@ -6,6 +6,8 @@ class Pipe:
     """Represents a Flappy Bird Pipe.
     """
     pipe_img = pygame.image.load("./assets/sprites/pipe.png")
+    top_pipe = pygame.transform.scale_by(pipe_img, 1.6)
+    bottom_pipe = pygame.transform.rotate(top_pipe, 180)
 
     def __init__(self, x):
         """Initialize the Pipe object.
@@ -17,6 +19,8 @@ class Pipe:
         self.opening = random.randint(100, int(FLOOR_Y - 100)) # The point where the pipe is open
         self.opening_size = 80
         self.pipe_speed = 250
+        self.top_pipe_y = self.opening + self.opening_size
+        self.bottom_pipe_y = self.opening - self.opening_size - self.bottom_pipe.get_height()
 
     def draw(self, surface):
         """Draws the Pipe object onto the given pygame surface.
@@ -24,10 +28,8 @@ class Pipe:
         Args:
             surface (pygame.Surface): The pygame surface to draw on.
         """
-        top_pipe = pygame.transform.scale_by(self.pipe_img, 1.6)
-        bottom_pipe = pygame.transform.rotate(top_pipe, 180)
-        surface.blit(top_pipe, (self.x, self.opening + self.opening_size))
-        surface.blit(bottom_pipe, (self.x, self.opening - self.opening_size - bottom_pipe.get_height()))
+        surface.blit(self.top_pipe, (self.x, self.top_pipe_y))
+        surface.blit(self.bottom_pipe, (self.x, self.bottom_pipe_y))
 
     def pipe_hitbox(self, pipe_y, hitbox_rect):
         """Returns true if a pipe collides with a hitbox Rect.
@@ -89,6 +91,8 @@ class Pipe:
             dt (Number): Delta time.
         """
         self.x -= SCROLL_SPEED * dt
+        self.top_pipe_y = self.opening + self.opening_size
+        self.bottom_pipe_y = self.opening - self.opening_size - self.bottom_pipe.get_height()
 
 
 class PipeManager:

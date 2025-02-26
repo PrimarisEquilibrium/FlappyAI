@@ -21,9 +21,11 @@ class Bird:
         self.state = 2
         self.animation_timer = 0
         self.going_up = True
+
+        self.is_alive = True
     
     # Returns false if game over (bird hits the ceiling or ground)
-    def update(self, dt):    
+    def update(self, dt, pipe_manager):    
         # Update velocity
         self.y_velocity += self.y_acceleration
         if self.y_velocity > self.terminal_velocity:
@@ -32,13 +34,15 @@ class Bird:
         # Update position
         self.y += self.y_velocity * dt
 
+        if pipe_manager.collided_with_pipes(self):
+            self.is_alive = False
         if self.y + self.ctr_y >= FLOOR_Y:
             self.y = FLOOR_Y - self.ctr_y
-            return False
+            self.is_alive = False
         if self.y - self.ctr_y < 0:
             self.y = self.ctr_y
             self.y_velocity = 0
-            return False
+            self.is_alive = False
         
     def jump(self):
         self.y_velocity = -600

@@ -46,19 +46,12 @@ def run(genomes, config):
     clock = pygame.time.Clock()
     dt = 0
 
-    # Game class initialization
-    bird = Bird(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 2)
-
     ground_manager = GroundManager()
     ground_manager.create_ground()
 
     pipe_manager = PipeManager()
 
-    score = 0
-
     # Game loop
-    has_started = False
-    game_over = False
     while True:
         event_list = pygame.event.get()
         for event in event_list:
@@ -70,46 +63,51 @@ def run(genomes, config):
                     pygame.quit()
                     sys.exit()
                     return
-            if (event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE) or event.type == pygame.MOUSEBUTTONDOWN:
-                has_started = True
-                if not game_over:
-                    bird.jump()
-            # if game_over and (event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN):
-            #     run() # Replay the game
 
         screen.fill((0, 0, 0))
         screen.blit(background, (0, 0))
-    
+
+        # Input data and get results from network
+        closest_pipe = pipe_manager.get_closest_pipe(birds[0].x)
+        for i, bird in enumerate(birds):
+            if closest_pipe:
+                output = nets[i].activate([
+                    bird.y_velocity,
+                    FLOOR_Y - bird.y,
+                    closest_pipe.x - bird.x,
+                    closest_pipe.top_pipe_y,
+                    closest_pipe.bottom_pipe_y
+                ])
+                i = output.index(max(output))
+                if i == 1:
+                    bird.jump()
+        
+        # Update birds and fitness
+        remaining_birds = 0
+        for i, bird in enumerate(birds):
+            if bird.is_alive:
+                remaining_birds += 1
+                bird.update(dt, pipe_manager)
+                if pipe_manager.has_passed_pipe(bird):
+                    genomes[i][1].fitness += 1
+            else:
+                bird.is_alive = False
+            
+        if remaining_birds == 0:
+            break
+
         pipe_manager.draw_pipes(screen)
         ground_manager.draw(screen)
-        bird.draw(screen)
 
-        closest_pipe = pipe_manager.get_closest_pipe(bird.x)
-        if closest_pipe:
-            # print("Pipe distance from bird:", round(closest_pipe.x - bird.x, 2))
-            # Line from bird to pipe distance
-            pygame.draw.line(screen, "green", (bird.x, bird.y), (closest_pipe.x, bird.y))
-        # print("Distance from ground:", round(FLOOR_Y - bird.y, 2))
-        pygame.draw.line(screen, "green", (bird.x, bird.y), (bird.x, FLOOR_Y))
+        for bird in birds:
+            if bird.is_alive:
+                bird.animate()
+                bird.draw(screen)
 
-        if pipe_manager.collided_with_pipes(bird):
-            game_over = True
-
-        if has_started:
-            bird.animate()
-            if not game_over:
-                pipe_manager.update_pipes(dt)
-                ground_manager.update(dt)
-            if bird.update(dt) == False:
-                game_over = True
+        pipe_manager.update_pipes(dt)
+        ground_manager.update(dt)
         
-        if pipe_manager.has_passed_pipe(bird):
-            score += 1
-        
-        display_text(screen, str(score), 72, "white", 20, 20)
-
-        if game_over:
-            display_game_over_screen(screen, score)
+        # display_text(screen, str(score), 72, "white", 20, 20)
 
         pygame.display.flip()
 
