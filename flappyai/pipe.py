@@ -49,24 +49,24 @@ class Pipe:
             hitbox_rect
         )
     
-    def collided_with_pipe(self, bird_hitbox_rect):
+    def collided_with_pipe(self, bird):
         """Returns True if the bird has collided with a pipe.
 
         Args:
-            bird_hitbox_rect (pygame.Rect): The hitbox Rect of the bird.
+            bird (Bird): The bird object.
 
         Returns:
             bool: True if the bird has collided with a pipe; otherwise False.
         """
         
-        return (self.pipe_hitbox(self.opening + self.opening_size, bird_hitbox_rect) or 
-                self.pipe_hitbox(self.opening - self.opening_size - self.pipe_img.get_height(), bird_hitbox_rect))
+        return (self.pipe_hitbox(self.opening + self.opening_size, bird.get_hitbox()) or 
+                self.pipe_hitbox(self.opening - self.opening_size - self.pipe_img.get_height(), bird.get_hitbox()))
 
-    def has_passed_pipe(self, bird_hitbox_rect):
+    def has_passed_pipe(self, bird):
         """Returns True if the bird passes through a pipe.
 
         Args:
-            bird_hitbox_rect (pygame.Rect): The hitbox Rect of the bird.
+            bird (Bird): The bird object.
 
         Returns:
             bool: True if the bird has passed through a pipe; otherwise False.
@@ -79,7 +79,7 @@ class Pipe:
                 10, 
                 self.opening_size * 2
             ), 
-            bird_hitbox_rect
+            bird.get_hitbox()
         )
 
     def update(self, dt):
@@ -149,18 +149,18 @@ class PipeManager:
         """
         return any([pipe.collided_with_pipe(bird_hitbox_rect) for pipe in self.pipes])
 
-    def has_passed_pipe(self, bird_hitbox_rect):
+    def has_passed_pipe(self, bird):
         """Returns True if the bird collides with opening.
 
         Args:
-            bird_hitbox_rect (pygame.Rect): The hitbox Rect of the bird.
+            bird (Bird): The bird object.
 
         Returns:
-            bool: True if the bird collides with the opening hitbox; otherwise False.
+            bool: True if the bird collides with the opening hitbox; otherwise False. 
         """
         for pipe in self.pipes:
             # Only count the pipe being passed one time
-            if pipe.has_passed_pipe(bird_hitbox_rect) and pipe is not self.latest_pased_pipe:
+            if pipe.has_passed_pipe(bird) and pipe is not self.latest_pased_pipe:
                 self.latest_pased_pipe = pipe
                 return True
         return False

@@ -78,7 +78,7 @@ def run():
         print("Distance from ground:", round(FLOOR_Y - bird.y, 2))
         pygame.draw.line(screen, "green", (bird.x, bird.y), (bird.x, FLOOR_Y))
 
-        if pipe_manager.collided_with_pipes(bird.get_hitbox()):
+        if pipe_manager.collided_with_pipes(bird):
             game_over = True
 
         if has_started:
@@ -89,7 +89,7 @@ def run():
             if bird.update(dt) == False:
                 game_over = True
         
-        if pipe_manager.has_passed_pipe(bird.get_hitbox()):
+        if pipe_manager.has_passed_pipe(bird):
             score += 1
         
         display_text(screen, str(score), 72, "white", 20, 20)
