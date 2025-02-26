@@ -3,13 +3,14 @@ from config import FLOOR_Y
 
 # Represents the "flappy" bird
 class Bird:
-    def __init__(self, x, y, bird_scale):
+    bird_scale = 1.8
+    bird = pygame.image.load("./assets/sprites/bird.png")
+    bird = pygame.transform.scale_by(bird, bird_scale)
+
+    def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.bird_scale = bird_scale
 
-        self.bird = pygame.image.load("./assets/sprites/bird.png")
-        self.bird = pygame.transform.scale_by(self.bird, self.bird_scale)
         self.ctr_x = self.bird.get_width() / 2
         self.ctr_y = self.bird.get_height() / 2
 

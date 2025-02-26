@@ -35,7 +35,7 @@ def run():
     dt = 0
 
     # Game class initialization
-    bird = Bird(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 2, 1.8)
+    bird = Bird(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 2)
 
     ground_manager = GroundManager()
     ground_manager.create_ground()
