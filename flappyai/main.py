@@ -1,9 +1,11 @@
 import pygame
+import neat
+import sys
 from bird import Bird
 from pipe import PipeManager
 from ground import GroundManager
 from config import SCREEN_WIDTH, SCREEN_HEIGHT, FLOOR_Y
-from utils import display_text, Button
+from utils import display_text
 
 background = pygame.image.load("./assets/sprites/background.png")
 background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -21,7 +23,18 @@ def display_game_over_screen(surface, score):
     display_text(surface, f"High Score: N/A", 36, "white", SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 50, True)
     display_text(surface, f"Press any key to play again", 36, "white", SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 100, True)
 
-def run():
+def run(genomes, config):
+    nets = []
+    birds = []
+
+    for id, genome in genomes:
+        # Create a neural network from the gene
+        net = neat.nn.FeedForwardNetwork.create(genome, config)
+        nets.append(net)
+        genome.fitness = 0 # Set initial fitness value to 0
+
+        birds.append(Bird(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 2))
+
     # Pygame initialization
     pygame.init()
     pygame.display.set_caption("FlappyAI")
@@ -31,7 +44,6 @@ def run():
     # Pygame variables
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
-    running = True
     dt = 0
 
     # Game class initialization
@@ -47,21 +59,23 @@ def run():
     # Game loop
     has_started = False
     game_over = False
-    while running:
+    while True:
         event_list = pygame.event.get()
         for event in event_list:
             if event.type == pygame.QUIT:
-                running = False
+                pygame.quit()
+                sys.exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
+                    sys.exit()
                     return
             if (event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE) or event.type == pygame.MOUSEBUTTONDOWN:
                 has_started = True
                 if not game_over:
                     bird.jump()
-            if game_over and (event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN):
-                run() # Replay the game
+            # if game_over and (event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN):
+            #     run() # Replay the game
 
         screen.fill((0, 0, 0))
         screen.blit(background, (0, 0))
@@ -72,10 +86,10 @@ def run():
 
         closest_pipe = pipe_manager.get_closest_pipe(bird.x)
         if closest_pipe:
-            print("Pipe distance from bird:", round(closest_pipe.x - bird.x, 2))
+            # print("Pipe distance from bird:", round(closest_pipe.x - bird.x, 2))
             # Line from bird to pipe distance
             pygame.draw.line(screen, "green", (bird.x, bird.y), (closest_pipe.x, bird.y))
-        print("Distance from ground:", round(FLOOR_Y - bird.y, 2))
+        # print("Distance from ground:", round(FLOOR_Y - bird.y, 2))
         pygame.draw.line(screen, "green", (bird.x, bird.y), (bird.x, FLOOR_Y))
 
         if pipe_manager.collided_with_pipes(bird):
@@ -101,7 +115,19 @@ def run():
 
         dt = clock.tick(240) / 1000
 
-    pygame.quit()
-
 if __name__ == "__main__":
-    run()
+    # Create NEAT configuration
+    config_path = "./config/config-feedforward.txt"
+    config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
+                         neat.DefaultSpeciesSet, neat.DefaultStagnation, config_path)
+
+    # Create core evolution algorithm class
+    p = neat.Population(config)
+
+    # Add a stdout reporter to show progress in the terminal.
+    p.add_reporter(neat.StdOutReporter(True))
+    stats = neat.StatisticsReporter()
+    p.add_reporter(stats)
+    p.add_reporter(neat.Checkpointer(5))
+
+    p.run(run, 300)
