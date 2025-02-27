@@ -91,11 +91,14 @@ def run(genomes, config):
                 remaining_birds += 1
                 bird.update(dt, pipe_manager)
                 # if pipe_manager.has_passed_pipe(bird):
-                genomes[i][1].fitness += 1
+                genomes[i][1].fitness += 0.1
+
+                if pipe_manager.has_passed_pipe(bird):
+                    genomes[i][1].fitness += 10  
+
                 if pipe_manager.collided_with_pipes(bird):
-                    genomes[i][1].fitness -= 500
-            else:
-                bird.is_alive = False
+                    genomes[i][1].fitness -= 5
+                    bird.is_alive = False
             
         if remaining_birds == 0:
             print(time, pygame.time.get_ticks() - time)
