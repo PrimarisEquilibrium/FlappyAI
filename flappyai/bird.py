@@ -33,6 +33,11 @@ class Bird:
         self.is_alive = True
     
     def update(self, dt):
+        """Updates the velocity and position of the bird.
+
+        Args:
+            dt (Number): Delta time.
+        """
         # Update velocity
         self.y_velocity += self.y_acceleration
         if self.y_velocity > self.terminal_velocity:
@@ -42,21 +47,41 @@ class Bird:
         self.y += self.y_velocity * dt
     
     def has_collided(self, pipe_manager):
+        """Determines if the bird has collided with a pipe.
+
+        Args:
+            pipe_manager (PipeManager): The pipe manager.
+
+        Returns:
+            bool: True if the bird has collided with a pipe; otherwise False.
+        """
         if pipe_manager.collided_with_pipes(self):
             self.is_alive = False
             return True
         return False
         
     def is_out_of_bounds(self):
+        """Determines if the bird is out of bounds.
+
+        Returns:
+            bool: True if the bird is out of bounds; otherwise False.
+        """
         if self.y + self.ctr_y >= FLOOR_Y or self.y - self.ctr_y < 0:
             self.is_alive = False
             return True
         return False
         
     def jump(self):
+        """Makes the bird "jump".
+        """
         self.y_velocity = -600
     
     def get_hitbox(self):
+        """Returns the current hitbox of the bird.
+
+        Returns:
+            pygame.Rect: The hitbox Rect of the bird.
+        """
         return pygame.Rect(
             self.x - self.ctr_x, 
             self.y - self.ctr_y, 
@@ -65,6 +90,8 @@ class Bird:
         )
     
     def animate(self):
+        """Animates the bird.
+        """
         if pygame.time.get_ticks() - self.animation_timer < 100:
             return
         self.animation_timer = pygame.time.get_ticks()
@@ -86,4 +113,9 @@ class Bird:
                 self.going_up = True
     
     def draw(self, surface):
+        """Draws the bird onto to screen.
+
+        Args:
+            surface (pygame.Surface): The surface to draw the bird on.
+        """
         surface.blit(self.bird, (self.x - self.ctr_x, self.y - self.ctr_y))
