@@ -77,28 +77,30 @@ def run(genomes, config):
                     bird.y_velocity,
                     FLOOR_Y - bird.y,
                     closest_pipe.x - bird.x,
-                    closest_pipe.top_pipe_y,
+                    closest_pipe.top_pipe_y + closest_pipe.top_pipe.get_height(),
                     closest_pipe.bottom_pipe_y
                 ])
                 i = output.index(max(output))
                 if i == 1:
                     bird.jump()
         
+        
         # Update birds and fitness
         remaining_birds = 0
         for i, bird in enumerate(birds):
             if bird.is_alive:
                 remaining_birds += 1
-                bird.update(dt, pipe_manager)
-                # if pipe_manager.has_passed_pipe(bird):
-                genomes[i][1].fitness += 0.1
+                bird.update(dt)
+                genomes[i][1].fitness += 0.05
 
                 if pipe_manager.has_passed_pipe(bird):
                     genomes[i][1].fitness += 10  
 
-                if pipe_manager.collided_with_pipes(bird):
+                if bird.has_collided(pipe_manager):
                     genomes[i][1].fitness -= 5
-                    bird.is_alive = False
+                
+                if bird.is_out_of_bounds():
+                    genomes[i][1].fitness -= 10
             
         if remaining_birds == 0:
             print(time, pygame.time.get_ticks() - time)

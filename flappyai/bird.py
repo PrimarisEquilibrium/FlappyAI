@@ -1,13 +1,21 @@
 import pygame
 from config import FLOOR_Y
 
-# Represents the "flappy" bird
+
 class Bird:
+    """Represents a Flappy bird
+    """
     bird_scale = 1.6
     bird = pygame.image.load("./assets/sprites/bird.png")
     bird = pygame.transform.scale_by(bird, bird_scale)
 
     def __init__(self, x, y):
+        """Initialize the Bird object.
+
+        Args:
+            x (Number): Initial x-position of the bird.
+            y (Number): Initial y-position of the bird.
+        """
         self.x = x
         self.y = y
 
@@ -24,8 +32,7 @@ class Bird:
 
         self.is_alive = True
     
-    # Returns false if game over (bird hits the ceiling or ground)
-    def update(self, dt, pipe_manager):    
+    def update(self, dt):
         # Update velocity
         self.y_velocity += self.y_acceleration
         if self.y_velocity > self.terminal_velocity:
@@ -33,16 +40,18 @@ class Bird:
             
         # Update position
         self.y += self.y_velocity * dt
-
+    
+    def has_collided(self, pipe_manager):
         if pipe_manager.collided_with_pipes(self):
             self.is_alive = False
-        if self.y + self.ctr_y >= FLOOR_Y:
-            self.y = FLOOR_Y - self.ctr_y
+            return True
+        return False
+        
+    def is_out_of_bounds(self):
+        if self.y + self.ctr_y >= FLOOR_Y or self.y - self.ctr_y < 0:
             self.is_alive = False
-        if self.y - self.ctr_y < 0:
-            self.y = self.ctr_y
-            self.y_velocity = 0
-            self.is_alive = False
+            return True
+        return False
         
     def jump(self):
         self.y_velocity = -600
