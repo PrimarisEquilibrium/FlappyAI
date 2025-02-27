@@ -50,6 +50,8 @@ def run(genomes, config):
     ground_manager.create_ground()
 
     pipe_manager = PipeManager()
+    
+    time = 0
 
     # Game loop
     while True:
@@ -88,12 +90,16 @@ def run(genomes, config):
             if bird.is_alive:
                 remaining_birds += 1
                 bird.update(dt, pipe_manager)
-                if pipe_manager.has_passed_pipe(bird):
-                    genomes[i][1].fitness += 1
+                # if pipe_manager.has_passed_pipe(bird):
+                genomes[i][1].fitness += 1
+                if pipe_manager.collided_with_pipes(bird):
+                    genomes[i][1].fitness -= 500
             else:
                 bird.is_alive = False
             
         if remaining_birds == 0:
+            print(time, pygame.time.get_ticks() - time)
+            time = pygame.time.get_ticks()
             break
 
         pipe_manager.draw_pipes(screen)
