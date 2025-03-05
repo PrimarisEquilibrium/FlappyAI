@@ -9,7 +9,8 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "pygame (>=2.6.1,<3.0.0)",
-    "neat-python (>=0.92,<0.93)"
+    "neat-python (>=0.92,<0.93)",
+    "pygame-gui (>=0.6.13,<0.7.0)"
 ]
 
 

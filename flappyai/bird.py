@@ -23,7 +23,7 @@ class Bird:
         self.ctr_y = self.bird.get_height() / 2
 
         self.y_velocity = 0
-        self.y_acceleration = 9.8
+        self.y_acceleration = 980
         self.terminal_velocity = 600
 
         self.state = 2
@@ -39,7 +39,7 @@ class Bird:
             dt (Number): Delta time.
         """
         # Update velocity
-        self.y_velocity += self.y_acceleration
+        self.y_velocity += self.y_acceleration * dt
         if self.y_velocity > self.terminal_velocity:
             self.y_velocity = self.terminal_velocity
             
@@ -74,7 +74,7 @@ class Bird:
     def jump(self):
         """Makes the bird "jump".
         """
-        self.y_velocity = -600
+        self.y_velocity = -350
     
     def get_hitbox(self):
         """Returns the current hitbox of the bird.

@@ -16,7 +16,7 @@ class Pipe:
             x (int): The initial x-position of the pipe.
         """
         self.x = x
-        self.opening = random.randint(100, int(FLOOR_Y - 100)) # The point where the pipe is open
+        self.opening = random.randint(150, int(FLOOR_Y - 150)) # The point where the pipe is open
         self.opening_size = 85
         self.pipe_speed = 250
         self.bottom_pipe_y = self.opening + self.opening_size
