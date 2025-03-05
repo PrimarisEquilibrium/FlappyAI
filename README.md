@@ -4,6 +4,15 @@
 
 <p id="description">A Flappy Bird AI built with Python utilizing the NEAT genetic algorithm</p>
 
+<p align="center">
+    <img src="https://img.shields.io/github/repo-size/PrimarisEquilibrium/FlappyAI" alt="shields">
+    <img src="https://img.shields.io/github/license/PrimarisEquilibrium/FlappyAI" alt="shields">
+    <img src="https://img.shields.io/github/last-commit/PrimarisEquilibrium/FlappyAI" alt="shields">
+    <img src="https://img.shields.io/badge/Python-3.x-blue?logo=python" alt="shields">
+    <img src="https://img.shields.io/badge/Pygame-2.x-green?logo=python" alt="shields">
+    <img src="https://img.shields.io/badge/AI-Genetic_Algorithm-orange" alt="shields">
+</p>
+
 <h2>Project Screenshots:</h2>
 
 <img src="https://github.com/user-attachments/assets/78e4c1ae-54ed-4279-a0d4-1b953626fc31" alt="project-screenshot" width="309" height="424/">
