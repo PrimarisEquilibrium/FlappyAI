@@ -1,4 +1,5 @@
 import pygame
+import pygame_gui
 import neat
 import sys
 import pickle
@@ -38,6 +39,18 @@ def run(genomes, config):
     clock = pygame.time.Clock()
     dt = 0
 
+    manager = pygame_gui.UIManager((SCREEN_WIDTH, SCREEN_HEIGHT))
+    save_network_button = pygame_gui.elements.UIButton(
+        relative_rect=pygame.Rect((15, SCREEN_HEIGHT - 65), (150, 50)),
+        text='Save Network',
+        manager=manager
+    )
+    load_network_button = pygame_gui.elements.UIButton(
+        relative_rect=pygame.Rect((175, SCREEN_HEIGHT - 65), (150, 50)),
+        text='Load Network',
+        manager=manager
+    )
+
     ground_manager = GroundManager()
     ground_manager.create_ground()
 
@@ -58,13 +71,15 @@ def run(genomes, config):
                     pygame.quit()
                     sys.exit()
                     return
-                
-# with open('data', 'wb') as data_file:
-#     pickle.dump([nets, best_score, generation], data_file)
-
-# with open('data', 'rb') as data_file:
-#     data = pickle.load(data_file)
-#     nets, best_score, generation = data[0], data[1], data[2]
+            if event.type == pygame_gui.UI_BUTTON_PRESSED:
+                if event.ui_element == save_network_button:
+                    with open('data', 'wb') as data_file:
+                        pickle.dump([nets, best_score, generation], data_file)
+                if event.ui_element == load_network_button:
+                    with open('data', 'rb') as data_file:
+                        data = pickle.load(data_file)
+                        nets, best_score, generation = data[0], data[1], data[2]
+            manager.process_events(event)
 
         screen.fill((0, 0, 0))
         screen.blit(background, (0, 0))
@@ -120,6 +135,9 @@ def run(genomes, config):
         display_text(screen, f"Alive: {remaining_birds}", 36, "white", 20, 50)
         display_text(screen, f"Score: {score}", 36, "white", 20, 80)
         display_text(screen, f"Best: {best_score}", 36, "white", 20, 110)
+
+        manager.update(dt)
+        manager.draw_ui(screen)
 
         pygame.display.flip()
 
