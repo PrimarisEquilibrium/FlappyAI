@@ -173,4 +173,4 @@ yaml = ["pyyaml (>=3.10)"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12"
-content-hash = "cd6b2bb6a0a636bc48d1fad8a9ca1fb5dbaaf37faa85d3f563701caa6dd98ace"
+content-hash = "28e41a2516f858ce006f73040d126c1755b86af6320153245e7380695f75de16"

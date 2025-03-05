@@ -22,7 +22,7 @@ def run(genomes, config):
     score = 0
 
     for id, genome in genomes:
-        # Create a neural network from the gene
+        # Create a neural network from]\ the gene
         net = neat.nn.FeedForwardNetwork.create(genome, config)
         nets.append(net)
         genome.fitness = 0 # Set initial fitness value to 0
@@ -73,12 +73,12 @@ def run(genomes, config):
                     return
             if event.type == pygame_gui.UI_BUTTON_PRESSED:
                 if event.ui_element == save_network_button:
-                    data_file = open('data', 'wb')
-                    pickle.dump([nets, best_score, generation], data_file) 
+                    with open('data', 'wb') as data_file:
+                        pickle.dump([nets, best_score, generation], data_file)
                 if event.ui_element == load_network_button:
-                    data_file = open('data', 'rb')   
-                    data = pickle.load(data_file)
-                    nets, best_score, generation = data[0], data[1], data[2]
+                    with open('data', 'rb') as data_file:
+                        data = pickle.load(data_file)
+                        nets, best_score, generation = data[0], data[1], data[2]
 
             manager.process_events(event)
 
