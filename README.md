@@ -1,8 +1,6 @@
 <h1 align="center" id="title">FlappyAI</h1>
 
-<p align="center"><img src="https://socialify.git.ci/PrimarisEquilibrium/FlappyAI/image?custom_description=A+Flappy+Bird+AI+utilizing+the+NEAT+genetic+algorithm&amp;description=1&amp;font=Inter&amp;language=1&amp;name=1&amp;owner=1&amp;pattern=Circuit+Board&amp;theme=Dark" alt="project-image"></p>
-
-<p id="description">A Flappy Bird AI built with Python utilizing the NEAT genetic algorithm</p>
+<p id="description" align="center">A Flappy Bird AI built with Python utilizing the NEAT genetic algorithm</p>
 
 <p align="center">
     <img src="https://img.shields.io/github/repo-size/PrimarisEquilibrium/FlappyAI" alt="shields">
@@ -12,6 +10,10 @@
     <img src="https://img.shields.io/badge/Pygame-2.x-green?logo=python" alt="shields">
     <img src="https://img.shields.io/badge/AI-Genetic_Algorithm-orange" alt="shields">
 </p>
+
+<p align="center"><img src="https://socialify.git.ci/PrimarisEquilibrium/FlappyAI/image?custom_description=A+Flappy+Bird+AI+utilizing+the+NEAT+genetic+algorithm&amp;description=1&amp;font=Inter&amp;language=1&amp;name=1&amp;owner=1&amp;pattern=Circuit+Board&amp;theme=Dark" alt="project-image"></p>
+
+<p>FlappyAI is an AI-powered Flappy Bird game that uses the NEAT genetic algorithm to evolve intelligent bird agents. The AI learns to navigate pipes over multiple generations, improving its performance through neuroevolution.</p>
 
 <h2>Project Screenshots:</h2>
 
